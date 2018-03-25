@@ -40,6 +40,18 @@
     <script src="assets/javascript/moment.js"></script>
     <script src="assets/javascript/numeral.js"></script>
 
+    <!-- hover for picking movies -->
+    <style>
+        div.rowPick:hover {
+            background-color: lightgreen;
+           }
+    </style>
+    <!-- hover for picking theater after movie is selected -->
+    <style>
+        div.rowPick2:hover {
+            background-color:lightseagreen;
+           }
+    </style>
 </head>
 
 <body>
@@ -75,6 +87,20 @@
 
     <!-- the MOVIE output page -->
     <div id="page2">
+        <!--  buttons for selection -->
+        <div class="page2-only">
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active">
+                    <a href="#">Output format</a>
+                </li>
+                <li role="presentation">
+                    <a href="#movieOutput">Show Movies</a>
+                </li>
+                <li role="presentation">
+                    <a href="#bottom-panel-div">Show Theaters</a>
+                </li>
+            </ul>
+        </div>
         <div class="wrapper">
             <div class="container-fluid">
                 <div class="panel panel-info" style="max-height:300px; overflow: auto; overflow-y: auto;">
@@ -85,7 +111,7 @@
             </div>
         </div>
 
-        <div class="wrapper">
+        <div class="wrapper page2-only">
             <div class="container-fluid">
                 <div class="panel panel-info" style="max-height:200px; overflow: auto; overflow-y: auto;">
                     <div class="panel-body" style="height:100%">
@@ -195,8 +221,34 @@
 
     <script>
 
+        var dispAllPage2 = function (dispElem) {
+            //hide all of the page 2 items
+            if (dispElem) {
+                $('#page2').css('display', 'block');
+                $('.page2-only').css('display', 'block');
+                $("#top-panel-div").css('display', 'block');
+            } else {
+                $('#page2').css('display', 'none');
+                $('.page2-only').css('display', 'none');
+                $("#top-panel-div").css('display', 'none');
+            };
+        };
+
+        var dispPage3 = function (dispElem) {
+            //hide / disp elements on page 3
+            if (dispElem) {
+                $('.page2-only').css('display', 'none');
+            } else {
+                $('.page2-only').css('display', 'block');
+            };
+        };
+
+
         $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();  //enable tool tips
             configData.dispRichOutput = true;
+            dispPage3(false);
+            dispAllPage2(false);
             getLocation();
 
             //add click listener to all movie pics
@@ -228,6 +280,7 @@
                 //document.getElementById("container-map").style.display = "block";
 
                 startSearches();
+                dispAllPage2(true);
             });
             /*
             var origin = new google.maps.LatLng(42.048361, -87.682224);

@@ -967,6 +967,10 @@ var outputMovies = function () {
 
         var newRow = $("<div>");
         $(newRow).addClass("row");
+        $(newRow).addClass("rowPick")
+        $(newRow).addClass("movie-pic");  //for mass adds
+        $(newRow).attr("data-image", i); //data for click
+
         var movieStr = mStack[i].title;
         var rating = mStack[i].rating;
         var runTime = mStack.runtime + " min";
@@ -1058,7 +1062,9 @@ var outputMovies = function () {
         $(newPtag).text(lineSynopsis);
         $(newPtag).appendTo(newRow);
 
-
+        //now add tool tips
+        $(newRow).attr("data-toggle", "tooltip");
+        $(newRow).attr("title", "Click to find more information");
         $(newRow).appendTo(divOutput);
 
         //horizontal break line
@@ -1068,6 +1074,7 @@ var outputMovies = function () {
         HRtag = $("<hr>");
         $(HRtag).appendTo(newPtag);
         $(newPtag).appendTo(newRow);
+
         $(newRow).appendTo(divOutput);
     };
     newRow = $("<div>");
@@ -1204,7 +1211,7 @@ var outputMoviesByMovieTime = function () {
     divTop.html("");
     var divBottom = $("#bottom-panel-div");
     divBottom.html("");
-   var mfStack = theaterObj.movieFoundStack;  //shorthand
+    var mfStack = theaterObj.movieFoundStack;  //shorthand
     var mStack = theaterObj.movieStack;  //shorthand
     var numFound = mfStack.length;
     //sort the movies by start time
@@ -1293,7 +1300,8 @@ var outputMoviesByMovieTime = function () {
         $(newRow).addClass("row");
         $(newRow).addClass("click-theater");
         $(newRow).attr("data-theater-ind", i);  //index to theater stack 
-
+        $(newRow).addClass("rowPick2");  //to set the hover color
+    
 
         //bring out as local variable for demo purposes
         var currCinemaRec = theaterObj.retMatchRecFromCinemaStack(mfStack[i].cinema_id);
@@ -1307,6 +1315,11 @@ var outputMoviesByMovieTime = function () {
         var distToCenter = currCinemaRec.distToCenter.toString();
         var travelTime = currCinemaRec.travelToTime.toString();
 
+        $(newRow).attr("data-toggle", "tooltip");
+        $(newRow).attr("html", "true");
+        $(newRow).attr("title", "Click to get map around  " + nameStr );
+
+        var divLeftSide = $("<div>");
 
         //        newPtag = $("<p>");
         H4tag = $("<h4>");
@@ -1340,7 +1353,8 @@ var outputMoviesByMovieTime = function () {
         var brTag = $("<br/>");
         $(brTag).css("line-height", "2px");
         $(brTag).appendTo(H4tag);
-        $(H4tag).appendTo(newRow);
+        //$(H4tag).appendTo(newRow); 
+        $(H4tag).appendTo(divLeftSide);
 
         newPtag = $("<p>");
         var H3tag = $("<h4>");
@@ -1443,8 +1457,92 @@ var outputMoviesByMovieTime = function () {
         var brTag = $("<br/>");
         $(brTag).appendTo(newPtag);
 
-        $(newPtag).appendTo(newRow);
+        $(newPtag).appendTo(divLeftSide); //left column
+        //need to float left
+        $(divLeftSide).css("float", "left");
+        $(divLeftSide).appendTo(newRow);
 
+        //middle column
+        var divMiddleSide = $("<div>");
+        divMiddleSide.css("float","left");
+        newPtag = $("<p>");
+        $(divMiddleSide).css("margin", "5px");
+        $(divMiddleSide).css("padding", "5px");
+        $(newPtag).text("");
+        $(newPtag).appendTo(divMiddleSide); //left column
+        $(divMiddleSide).appendTo(newRow);
+        
+
+        //start the right side
+        var divRightSide = $("<div>");
+        divRightSide.css("float","left");
+        newPtag = $("<p>");
+        var H5tag = $("<h5>");
+        $(H5tag).css("line-height", "1.0");
+        $(H5tag).css("margin", "0px");
+        $(H5tag).css("padding", "0px");
+        $(newPtag).css("margin", "0px");
+        $(newPtag).css("padding", "0px");
+        $(newPtag).css("line-height", "2px");
+        $(H5tag).text("To view map");
+        $(H5tag).appendTo(newPtag);
+        var brTag = $("<br/>");
+        $(brTag).appendTo(newPtag);
+        $(newPtag).appendTo(divRightSide); //left column
+
+        //next line on the right side
+        newPtag = $("<p>");
+        var H5tag = $("<h5>");
+        $(H5tag).css("line-height", "1.0");
+        $(H5tag).css("margin", "0px");
+        $(H5tag).css("padding", "0px");
+        $(newPtag).css("margin", "0px");
+        $(newPtag).css("padding", "0px");
+        $(newPtag).css("line-height", "2px");
+        $(H5tag).text("of the theater");
+        $(H5tag).appendTo(newPtag);
+        var brTag = $("<br/>");
+        $(brTag).appendTo(newPtag);
+        $(newPtag).appendTo(divRightSide); //left column
+
+        //next line on the right side
+        newPtag = $("<p>");
+        var H5tag = $("<h5>");
+        $(H5tag).css("line-height", "1.0");
+        $(H5tag).css("margin", "0px");
+        $(H5tag).css("padding", "0px");
+        $(newPtag).css("margin", "0px");
+        $(newPtag).css("padding", "0px");
+        $(newPtag).css("line-height", "2px");
+        $(H5tag).text("and restaurants");
+        $(H5tag).appendTo(newPtag);
+        var brTag = $("<br/>");
+        $(brTag).appendTo(newPtag);
+        $(newPtag).appendTo(divRightSide); //left column
+        $(divRightSide).appendTo(newRow);
+
+        //next line on the right side
+        newPtag = $("<p>");
+        var H5tag = $("<h5>");
+        $(H5tag).css("line-height", "1.0");
+        $(H5tag).css("margin", "0px");
+        $(H5tag).css("padding", "0px");
+        $(newPtag).css("margin", "0px");
+        $(newPtag).css("padding", "0px");
+        $(newPtag).css("line-height", "2px");
+        $(H5tag).text("click on this line");
+        $(H5tag).appendTo(newPtag);
+        var brTag = $("<br/>");
+        $(brTag).appendTo(newPtag);
+        $(newPtag).appendTo(divRightSide); //left column
+        $(divRightSide).appendTo(newRow);
+
+        //close the row
+        $(newRow).appendTo(divOutput);
+
+
+        newRow = $("<div>");
+        $(newRow).addClass("row");
         //horizontal row between movies
         newPtag = $("<p>");
         HRtag = $("<hr>");
@@ -1763,6 +1861,11 @@ var evalPicClick = function () {
     var divOutput = $("#movieOutput");
     divOutput.html("");
     theaterObj.numMovieClickedIndex = parseInt(imgClicked);
+
+    //now call the function on the index.html page 
+    dispAllPage2( true );
+    dispPage3( true );
+
     //find all matches and put onto a moviesFound stack with movie_id, start_time, and cinema
     theaterObj.doMoviesFoundList();
     modalWaitMovieTimes.style.display = "none";
