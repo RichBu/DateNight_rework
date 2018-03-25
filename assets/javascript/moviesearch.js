@@ -493,7 +493,6 @@ var theaterObj = {   //main object for the whole theater
 
         var newRec = jQuery.extend(true, {}, ctfRec);
         theaterObj.theatersFoundStack.push(newRec);
-        console.log("converting .. " + theaterObj.numCinemaConv);
         theaterObj.numCinemaConv++; //go to the next one
         if (theaterObj.numCinemaConv < theaterObj.cinemaIDstack.length) {
             //do another search
@@ -1207,6 +1206,7 @@ var outputMoviesByMovieTime = function () {
     //outputs search to movies
     var divOutput = $("#movieOutput");
     divOutput.html("");
+    $(divOutput).scrollTop(0);
     var divTop = $("#top-panel-div");
     divTop.html("");
     var divBottom = $("#bottom-panel-div");
@@ -1217,6 +1217,9 @@ var outputMoviesByMovieTime = function () {
     //sort the movies by start time
     mfStack.sort(function (a, b) { return a.startTime_ts - b.startTime_ts });
 
+    var newRow;
+
+    //FIRST section
     //move to local variables for show and tell purposes
     //theaterObj.retMatchRecFromMovieStack(mfStack[theaterObj.numMovieClickedIndex].movie_id);
     var movieRec = theaterObj.retMatchRecFromMovieStack(mStack[theaterObj.numMovieClickedIndex].movie_id);
@@ -1227,7 +1230,7 @@ var outputMoviesByMovieTime = function () {
     var movie_url_website = movieRec.urlWebsite;
     var movie_url_trailer = movieRec.urlTrailer;
 
-    var newRow = $("<div>");
+    newRow = $("<div>");
     $(newRow).addClass("row");
     $(newRow).css("line-height", "2px");
     $(newRow).css("margin", "2px");
@@ -1272,7 +1275,7 @@ var outputMoviesByMovieTime = function () {
     $(newRow).addClass("row");
     $(newRow).appendTo(divTop);
 
-    //findings heading
+    //Heading in the panel with the theater times
     newPtag = $("<p>");
     H3tag = $("<h3>");
     var findingsStr = "Theater Times (sorted by start time)";
@@ -1291,8 +1294,7 @@ var outputMoviesByMovieTime = function () {
     $(HRtag).appendTo(newPtag);
     $(newPtag).appendTo(newRow);        //hor row
     $(newRow).appendTo(divOutput);
-    newRow = $("<div>");
-    $(newRow).addClass("row");
+
 
     for (var i = 0; i < numFound; i++) {
         //loop thru the entire stack of theaters found
@@ -1301,7 +1303,7 @@ var outputMoviesByMovieTime = function () {
         $(newRow).addClass("click-theater");
         $(newRow).attr("data-theater-ind", i);  //index to theater stack 
         $(newRow).addClass("rowPick2");  //to set the hover color
-    
+
 
         //bring out as local variable for demo purposes
         var currCinemaRec = theaterObj.retMatchRecFromCinemaStack(mfStack[i].cinema_id);
@@ -1317,7 +1319,7 @@ var outputMoviesByMovieTime = function () {
 
         $(newRow).attr("data-toggle", "tooltip");
         $(newRow).attr("html", "true");
-        $(newRow).attr("title", "Click to get map around  " + nameStr );
+        $(newRow).attr("title", "Click to get map around  " + nameStr);
 
         var divLeftSide = $("<div>");
 
@@ -1464,18 +1466,18 @@ var outputMoviesByMovieTime = function () {
 
         //middle column
         var divMiddleSide = $("<div>");
-        divMiddleSide.css("float","left");
+        divMiddleSide.css("float", "left");
         newPtag = $("<p>");
         $(divMiddleSide).css("margin", "5px");
         $(divMiddleSide).css("padding", "5px");
         $(newPtag).text("");
         $(newPtag).appendTo(divMiddleSide); //left column
         $(divMiddleSide).appendTo(newRow);
-        
+
 
         //start the right side
         var divRightSide = $("<div>");
-        divRightSide.css("float","left");
+        divRightSide.css("float", "left");
         newPtag = $("<p>");
         var H5tag = $("<h5>");
         $(H5tag).css("line-height", "1.0");
@@ -1552,7 +1554,12 @@ var outputMoviesByMovieTime = function () {
         $(newRow).appendTo(divOutput);
     };
 
+    newRow = $("<div>");
+    $(newRow).addClass("row");
+    //end of headeding
+
     $(newRow).appendTo(divOutput);
+    /*
     newRow = $("<div>");
     $(newRow).addClass("row");
     newPtag = $("<p>");
@@ -1563,7 +1570,11 @@ var outputMoviesByMovieTime = function () {
 
     //finish out the row
     $(newRow).appendTo(divOutput);
+    */
+
     $(divOutput).scrollTop(0);
+    $(divTop).scrollTop(0);
+    $(divBottom).scrollTop(0);
 };
 
 
@@ -1863,13 +1874,15 @@ var evalPicClick = function () {
     theaterObj.numMovieClickedIndex = parseInt(imgClicked);
 
     //now call the function on the index.html page 
-    dispAllPage2( true );
-    dispPage3( true );
+    dispAllPage2(true);
+    dispPage3(true);
 
     //find all matches and put onto a moviesFound stack with movie_id, start_time, and cinema
     theaterObj.doMoviesFoundList();
     modalWaitMovieTimes.style.display = "none";
     outputMoviesByMovieTime();
+
+    $("#movieOutput").scrollTop(0);
 };
 
 
@@ -2047,12 +2060,10 @@ var geoDistResponded = function (response, status) {
             var distance = response.rows[0].elements[0].distance;
             var distance_value = distance.value;
             var miles = parseFloat(distance_value) / 1609.344;
-            console.log("distance = " + miles);
             theaterObj.geoLookup.geoDistFound = miles;
             var timeInSecs = response.rows[0].elements[0].duration.value;
             var timeInMin = parseFloat(timeInSecs) / 60.00;
             theaterObj.geoLookup.geoTimeTravel = timeInMin;
-            console.log("time in min = " + timeInMin);
 
             //now figure out what to do next
             if (theaterObj.geoLookup.currStackWorkingOn === "TF") {
